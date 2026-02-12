@@ -17,6 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import fr.sdv.b3dev.gameapp.domain.Game
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.AssistChip
 
 @Composable
 fun GameDetailContent(game: Game, navController: NavController, context: Context) {
@@ -41,13 +46,63 @@ fun GameDetailContent(game: Game, navController: NavController, context: Context
 
         Text(text = game.name, style = MaterialTheme.typography.titleLarge)
         Text(text = "⭐ ${game.rating}", style = MaterialTheme.typography.bodyMedium)
+        game.esrbRating?.let {
+            Text(
+                text = "ESRB: $it",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
         Text(text = "Released: ${game.released ?: "Unknown"}", style = MaterialTheme.typography.bodySmall)
-
         Text(text = "Genres: ${game.genres.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)
         Text(text = "Platforms: ${game.platforms.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)
         Text(text = "Metacritic: ${game.metacritic ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = game.description ?: "No description available", style = MaterialTheme.typography.bodySmall)
+
+        if (game.developers.isNotEmpty()) {
+            Text(
+                text = "Developers: ${game.developers.joinToString()}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        if (game.publishers.isNotEmpty()) {
+            Text(
+                text = "Publishers: ${game.publishers.joinToString()}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        game.website?.let { url ->
+            Text(
+                text = "Official Website",
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    context.startActivity(intent)
+                }
+            )
+        }
+
+        if (game.tags.isNotEmpty()) {
+
+            Text(
+                text = "Tags",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                game.tags.forEach { tag ->
+                    AssistChip(
+                        onClick = { },
+                        label = { Text(tag) }
+                    )
+                }
+            }
+        }
 
         if (game.screenshots.isNotEmpty()) {
 

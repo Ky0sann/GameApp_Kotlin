@@ -10,7 +10,12 @@ data class Game(
     val platforms: List<Platform> = emptyList(),
     val metacritic: Int? = null,
     val description: String? = null,
-    val screenshots: List<String> = emptyList()
+    val screenshots: List<String> = emptyList(),
+    val developers: List<String> = emptyList(),
+    val publishers: List<String> = emptyList(),
+    val website: String? = null,
+    val tags: List<String> = emptyList(),
+    val esrbRating: String? = null
 )
 
 data class Genre(val name: String)

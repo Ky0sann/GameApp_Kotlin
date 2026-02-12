@@ -10,8 +10,13 @@ data class GameRemoteDetailResponse(
     val released: String?,
     val description_raw: String?,
     val metacritic: Int?,
+    val website: String?,
     val genres: List<GenreResponse> = emptyList(),
-    val platforms: List<PlatformResponse> = emptyList()
+    val platforms: List<PlatformResponse> = emptyList(),
+    val developers: List<CompanyResponse> = emptyList(),
+    val publishers: List<CompanyResponse> = emptyList(),
+    val tags: List<TagResponse> = emptyList(),
+    val esrb_rating: EsrbResponse?
 )
 
 data class GenreResponse(
