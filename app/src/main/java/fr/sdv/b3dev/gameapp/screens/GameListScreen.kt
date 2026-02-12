@@ -10,11 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.screens.components.GameItem
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun GameListScreen(
-    viewModel: GameListViewModel,
-    apiKey: String
+    viewModel: GameListViewModel = getViewModel(),
+    apiKey: String,
+    onGameClick: (Int) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -46,7 +48,9 @@ fun GameListScreen(
                     contentPadding = PaddingValues(vertical = 8.dp)
                 ) {
                     items(games) { game ->
-                        GameItem(game)
+                        GameItem(game) {
+                            onGameClick(game.id)
+                        }
                     }
                 }
             }

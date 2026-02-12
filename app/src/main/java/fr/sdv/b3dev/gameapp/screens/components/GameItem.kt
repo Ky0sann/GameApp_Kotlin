@@ -1,5 +1,6 @@
 package fr.sdv.b3dev.gameapp.screens.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -12,12 +13,13 @@ import coil.compose.AsyncImage
 import fr.sdv.b3dev.gameapp.domain.Game
 
 @Composable
-fun GameItem(game: Game) {
+fun GameItem(game: Game, onClick: () -> Unit) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(12.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {

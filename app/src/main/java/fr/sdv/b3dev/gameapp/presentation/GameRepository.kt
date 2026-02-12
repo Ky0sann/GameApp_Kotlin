@@ -10,4 +10,8 @@ class GameRepository(
     suspend fun getPopularGames(apiKey: String): List<Game> {
         return remoteDataSource.getPopularGames(apiKey)
     }
+
+    suspend fun getGameDetail(gameId: Int, apiKey: String): Game {
+        return remoteDataSource.getGameDetail(gameId, apiKey)
+    }
 }

@@ -5,5 +5,12 @@ data class Game(
     val name: String,
     val background_image: String?,
     val rating: Double,
-    val released: String?
+    val released: String?,
+    val genres: List<Genre> = emptyList(),
+    val platforms: List<Platform> = emptyList(),
+    val metacritic: Int? = null,
+    val description: String? = null
 )
+
+data class Genre(val name: String)
+data class Platform(val name: String)

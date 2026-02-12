@@ -1,0 +1,50 @@
+package fr.sdv.b3dev.gameapp.screens.components
+
+import android.content.Context
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import fr.sdv.b3dev.gameapp.domain.Game
+
+@Composable
+fun GameDetailContent(game: Game, navController: NavController, context: Context) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        AsyncImage(
+            model = game.background_image,
+            contentDescription = game.name,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .clip(RoundedCornerShape(16.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        Text(text = game.name, style = MaterialTheme.typography.titleLarge)
+        Text(text = "⭐ ${game.rating}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Released: ${game.released ?: "Unknown"}", style = MaterialTheme.typography.bodySmall)
+
+        Text(text = "Genres: ${game.genres.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Platforms: ${game.platforms.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Metacritic: ${game.metacritic ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = game.description ?: "No description available", style = MaterialTheme.typography.bodySmall)
+    }
+}
