@@ -13,18 +13,20 @@ class GameRemoteDataSource(
     }
 
     suspend fun getGameDetail(gameId: Int, apiKey: String): Game {
-        val response = api.getGameDetail(gameId, apiKey)
+        val detailResponse = api.getGameDetail(gameId, apiKey)
+        val screenshotResponse = api.getGameScreenshots(gameId, apiKey)
 
         return Game(
-            id = response.id,
-            name = response.name,
-            background_image = response.backgroundImage,
-            rating = response.rating,
-            released = response.released,
-            description = response.description_raw,
-            metacritic = response.metacritic,
-            genres = response.genres.map { Genre(it.name) },
-            platforms = response.platforms.map { Platform(it.platform.name) }
+            id = detailResponse.id,
+            name = detailResponse.name,
+            background_image = detailResponse.backgroundImage,
+            rating = detailResponse.rating,
+            released = detailResponse.released,
+            description = detailResponse.description_raw,
+            metacritic = detailResponse.metacritic,
+            genres = detailResponse.genres.map { Genre(it.name) },
+            platforms = detailResponse.platforms.map { Platform(it.platform.name) },
+            screenshots = screenshotResponse.results.map { it.image }
         )
     }
 }

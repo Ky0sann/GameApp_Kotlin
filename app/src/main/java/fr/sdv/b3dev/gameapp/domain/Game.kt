@@ -9,7 +9,8 @@ data class Game(
     val genres: List<Genre> = emptyList(),
     val platforms: List<Platform> = emptyList(),
     val metacritic: Int? = null,
-    val description: String? = null
+    val description: String? = null,
+    val screenshots: List<String> = emptyList()
 )
 
 data class Genre(val name: String)

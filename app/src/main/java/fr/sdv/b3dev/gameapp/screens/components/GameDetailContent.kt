@@ -2,6 +2,8 @@ package fr.sdv.b3dev.gameapp.screens.components
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -46,5 +48,31 @@ fun GameDetailContent(game: Game, navController: NavController, context: Context
         Text(text = "Metacritic: ${game.metacritic ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = game.description ?: "No description available", style = MaterialTheme.typography.bodySmall)
+
+        if (game.screenshots.isNotEmpty()) {
+
+            Text(
+                text = "Screenshots",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(game.screenshots) { screenshotUrl ->
+
+                    AsyncImage(
+                        model = screenshotUrl,
+                        contentDescription = "Screenshot",
+                        modifier = Modifier
+                            .width(250.dp)
+                            .height(150.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import fr.sdv.b3dev.gameapp.domain.GameResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Path
+import fr.sdv.b3dev.gameapp.domain.ScreenshotResponse
 
 interface GameApiService {
 
@@ -20,4 +21,10 @@ interface GameApiService {
         @Path("id") gameId: Int,
         @Query("key") apiKey: String
     ): GameRemoteDetailResponse
+
+    @GET("games/{id}/screenshots")
+    suspend fun getGameScreenshots(
+        @Path("id") gameId: Int,
+        @Query("key") apiKey: String
+    ): ScreenshotResponse
 }
