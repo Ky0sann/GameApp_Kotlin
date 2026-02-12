@@ -3,6 +3,7 @@ package fr.sdv.b3dev.gameapp.datasource.rest
 import fr.sdv.b3dev.gameapp.domain.Game
 import fr.sdv.b3dev.gameapp.domain.Genre
 import fr.sdv.b3dev.gameapp.domain.Platform
+import fr.sdv.b3dev.gameapp.domain.Store
 
 class GameRemoteDataSource(
     private val api: GameApiService
@@ -25,6 +26,7 @@ class GameRemoteDataSource(
         val screenshotResponse = api.getGameScreenshots(gameId, apiKey)
         val movieResponse = api.getGameMovies(gameId, apiKey)
         val firstTrailer = movieResponse.results.firstOrNull()
+        val stores = detailResponse.stores.map { Store(it.store.name, it.store.domain) }
 
         return Game(
             id = detailResponse.id,
@@ -43,7 +45,8 @@ class GameRemoteDataSource(
             tags = detailResponse.tags.map { it.name }.take(10),
             esrbRating = detailResponse.esrb_rating?.name,
             trailerUrl = firstTrailer?.data?.max,
-            trailerPreview = firstTrailer?.preview
+            trailerPreview = firstTrailer?.preview,
+            stores = stores
         )
     }
 }

@@ -17,7 +17,8 @@ data class Game(
     val tags: List<String> = emptyList(),
     val esrbRating: String? = null,
     val trailerUrl: String? = null,
-    val trailerPreview: String? = null
+    val trailerPreview: String? = null,
+    val stores: List<Store> = emptyList()
 )
 
 data class Genre(val name: String)
@@ -31,4 +32,9 @@ data class MovieItem(
 
 data class MovieData(
     val max: String
+)
+
+data class Store(
+    val name: String,
+    val domain: String
 )

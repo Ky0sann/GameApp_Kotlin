@@ -16,7 +16,8 @@ data class GameRemoteDetailResponse(
     val developers: List<CompanyResponse> = emptyList(),
     val publishers: List<CompanyResponse> = emptyList(),
     val tags: List<TagResponse> = emptyList(),
-    val esrb_rating: EsrbResponse?
+    val esrb_rating: EsrbResponse?,
+    val stores: List<StoreResponse>
 )
 
 data class GenreResponse(
@@ -29,4 +30,15 @@ data class PlatformResponse(
 
 data class PlatformDetail(
     val name: String
+)
+
+data class StoreResponse(
+    val id: Int,
+    val store: StoreDetail
+)
+
+data class StoreDetail(
+    val id: Int,
+    val name: String,
+    val domain: String
 )

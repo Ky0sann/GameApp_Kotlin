@@ -105,6 +105,29 @@ fun GameDetailContent(game: Game, navController: NavController, context: Context
             }
         }
 
+        if (game.stores.isNotEmpty()) {
+            Text(
+                text = "Buy on",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                game.stores.forEach { store ->
+                    AssistChip(
+                        onClick = {
+                            val url = "https://${store.domain}/search?q=${Uri.encode(game.name)}"
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent)
+                        },
+                        label = { Text(store.name) }
+                    )
+                }
+            }
+        }
+
         if (game.screenshots.isNotEmpty()) {
 
             Text(
