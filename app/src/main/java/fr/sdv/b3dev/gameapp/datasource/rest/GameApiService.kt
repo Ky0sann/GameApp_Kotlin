@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Path
 import fr.sdv.b3dev.gameapp.domain.ScreenshotResponse
+import fr.sdv.b3dev.gameapp.domain.MovieResponse
 
 interface GameApiService {
 
@@ -27,4 +28,10 @@ interface GameApiService {
         @Path("id") gameId: Int,
         @Query("key") apiKey: String
     ): ScreenshotResponse
+
+    @GET("games/{id}/movies")
+    suspend fun getGameMovies(
+        @Path("id") gameId: Int,
+        @Query("key") apiKey: String
+    ): MovieResponse
 }

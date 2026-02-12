@@ -36,3 +36,7 @@ data class GameRemoteListItem(
     val rating: Double,
     val released: String?
 )
+
+data class MovieResponse(
+    val results: List<MovieItem>
+)

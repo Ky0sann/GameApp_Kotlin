@@ -23,6 +23,8 @@ class GameRemoteDataSource(
     suspend fun getGameDetail(gameId: Int, apiKey: String): Game {
         val detailResponse = api.getGameDetail(gameId, apiKey)
         val screenshotResponse = api.getGameScreenshots(gameId, apiKey)
+        val movieResponse = api.getGameMovies(gameId, apiKey)
+        val firstTrailer = movieResponse.results.firstOrNull()
 
         return Game(
             id = detailResponse.id,
@@ -39,7 +41,9 @@ class GameRemoteDataSource(
             publishers = detailResponse.publishers.map { it.name },
             website = detailResponse.website,
             tags = detailResponse.tags.map { it.name }.take(10),
-            esrbRating = detailResponse.esrb_rating?.name
+            esrbRating = detailResponse.esrb_rating?.name,
+            trailerUrl = firstTrailer?.data?.max,
+            trailerPreview = firstTrailer?.preview
         )
     }
 }

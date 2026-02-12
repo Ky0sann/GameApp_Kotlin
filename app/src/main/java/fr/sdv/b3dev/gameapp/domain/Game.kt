@@ -15,8 +15,20 @@ data class Game(
     val publishers: List<String> = emptyList(),
     val website: String? = null,
     val tags: List<String> = emptyList(),
-    val esrbRating: String? = null
+    val esrbRating: String? = null,
+    val trailerUrl: String? = null,
+    val trailerPreview: String? = null
 )
 
 data class Genre(val name: String)
 data class Platform(val name: String)
+
+data class MovieItem(
+    val name: String,
+    val preview: String,
+    val data: MovieData
+)
+
+data class MovieData(
+    val max: String
+)

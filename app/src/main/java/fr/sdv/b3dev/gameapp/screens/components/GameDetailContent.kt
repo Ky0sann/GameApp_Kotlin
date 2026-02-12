@@ -22,6 +22,7 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.AssistChip
+import androidx.compose.ui.Alignment
 
 @Composable
 fun GameDetailContent(game: Game, navController: NavController, context: Context) {
@@ -129,5 +130,38 @@ fun GameDetailContent(game: Game, navController: NavController, context: Context
                 }
             }
         }
+
+            Text(
+                text = "Trailer",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            val trailerIntentUrl = game.trailerUrl ?: "https://www.youtube.com/results?search_query=${Uri.encode(game.name)}+trailer"
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(trailerIntentUrl))
+                        context.startActivity(intent)
+                    }
+            ) {
+
+                AsyncImage(
+                    model = game.trailerPreview ?: "https://changeourcity.com/wp-content/uploads/2020/03/watch-on-youtube-vbf.png",
+                    contentDescription = "Trailer Preview",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                Text(
+                    text = "▶",
+                    style = MaterialTheme.typography.displayMedium,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+
     }
-}
