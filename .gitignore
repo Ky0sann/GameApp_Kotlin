@@ -1,0 +1,82 @@
+# Kotlin / Java
+*.class
+*.jar
+*.war
+*.ear
+*.apk
+*.ap_
+*.dex
+*.class
+*.log
+*.tmp
+
+# Gradle
+.gradle/
+build/
+!gradle-wrapper.jar
+gradle-wrapper.properties
+gradle-app.setting
+gradle-wrapper.jar
+
+# Android Studio
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Local configuration
+local.properties
+
+# Signing files
+*.jks
+*.keystore
+
+# Generated files
+captures/
+output.json
+
+# Logs
+*.log
+
+# Android specific
+*.dex
+*.class
+*.apk
+*.ap_
+*.aab
+*.so
+*.jar
+*.keystore
+*.db
+*.db-journal
+*.lock
+*.tmp
+*.patch
+*.orig
+*.rej
+
+# Kotlin specific
+*.kotlin_module
+*.kotlin_metadata
+
+# NDK
+obj/
+.externalNativeBuild/
+
+# JetBrains IDEs
+*.idea/
+*.idea/workspace.xml
+*.idea/libraries/
+*.idea/modules.xml
+*.idea/misc.xml
+*.iml
+*.ipr
+*.iws
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Others
+*.log
+*.orig
