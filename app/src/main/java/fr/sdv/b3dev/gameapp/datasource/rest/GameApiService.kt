@@ -41,4 +41,16 @@ interface GameApiService {
         @Query("search") query: String,
         @Query("page_size") pageSize: Int = 20
     ): GameResponse
+
+    @GET("games")
+    suspend fun getFilteredGames(
+        @Query("key") apiKey: String,
+        @Query("search") query: String? = null,
+        @Query("genres") genres: String? = null,
+        @Query("platforms") platforms: String? = null,
+        @Query("tags") tags: String? = null,
+        @Query("dates") dates: String? = null,
+        @Query("ordering") ordering: String? = "-rating",
+        @Query("page_size") pageSize: Int = 20
+    ): GameResponse
 }

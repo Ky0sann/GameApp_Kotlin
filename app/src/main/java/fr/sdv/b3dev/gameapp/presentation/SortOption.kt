@@ -8,3 +8,12 @@ enum class SortOption(val displayName: String) {
     RELEASED_ASC("Release Date ↑"),
     RELEASED_DESC("Release Date ↓")
 }
+
+fun SortOption.toApiOrdering(): String = when(this) {
+    SortOption.NAME_ASC -> "name"
+    SortOption.NAME_DESC -> "-name"
+    SortOption.RATING_ASC -> "rating"
+    SortOption.RATING_DESC -> "-rating"
+    SortOption.RELEASED_ASC -> "released"
+    SortOption.RELEASED_DESC -> "-released"
+}
