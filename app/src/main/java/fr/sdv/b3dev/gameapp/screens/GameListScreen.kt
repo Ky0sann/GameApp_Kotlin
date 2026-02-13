@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
+import fr.sdv.b3dev.gameapp.presentation.SortOption
 import fr.sdv.b3dev.gameapp.screens.components.GameItem
 import org.koin.androidx.compose.getViewModel
 import fr.sdv.b3dev.gameapp.screens.components.SearchBar
@@ -22,6 +23,7 @@ fun GameListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
+    val sortOption by viewModel.sortOptionState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.init(apiKey)
@@ -40,6 +42,29 @@ fun GameListScreen(
                 viewModel.onSearchQueryChanged(it)
             }
         )
+
+        var expanded by remember { mutableStateOf(false) }
+
+        Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+            TextButton(onClick = { expanded = true }) {
+                Text("Sort by: ${sortOption.displayName}")
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                SortOption.values().forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option.displayName) },
+                        onClick = {
+                            viewModel.onSortOptionChanged(option)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
 
         when (uiState) {
             is GameListUiState.Loading -> {

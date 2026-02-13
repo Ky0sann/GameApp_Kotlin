@@ -2,6 +2,7 @@ package fr.sdv.b3dev.gameapp.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.sdv.b3dev.gameapp.domain.Game
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,6 +17,9 @@ class GameListViewModel(
 
     private val _uiState = MutableStateFlow<GameListUiState>(GameListUiState.Loading)
     val uiState: StateFlow<GameListUiState> = _uiState
+
+    private val _sortOption = MutableStateFlow(SortOption.RATING_DESC)
+    val sortOptionState: StateFlow<SortOption> = _sortOption
 
     private val searchQuery = MutableStateFlow("")
     private var currentApiKey: String? = null
@@ -35,6 +39,17 @@ class GameListViewModel(
         searchQuery.value = query
     }
 
+    fun onSortOptionChanged(option: SortOption) {
+        _sortOption.value = option
+
+        val currentState = _uiState.value
+        if (currentState is GameListUiState.Success) {
+            _uiState.value = GameListUiState.Success(
+                sortGames(currentState.games, option)
+            )
+        }
+    }
+
     private fun observeSearch() {
         viewModelScope.launch {
             searchQuery
@@ -44,9 +59,7 @@ class GameListViewModel(
                     if (query.length in 1..2) return@collectLatest
                     val apiKey = currentApiKey ?: return@collectLatest
 
-                    if (_uiState.value !is GameListUiState.Success) {
-                        _uiState.value = GameListUiState.Loading
-                    }
+                    _uiState.value = GameListUiState.Loading
 
                     try {
                         val games = if (query.isBlank()) {
@@ -55,7 +68,8 @@ class GameListViewModel(
                             repository.searchGames(apiKey, query)
                         }
 
-                        _uiState.value = GameListUiState.Success(games)
+                        val sortedGames = sortGames(games, _sortOption.value)
+                        _uiState.value = GameListUiState.Success(sortedGames)
 
                     } catch (e: Exception) {
                         _uiState.value =
@@ -72,11 +86,23 @@ class GameListViewModel(
             _uiState.value = GameListUiState.Loading
             try {
                 val games = repository.getPopularGames(apiKey)
-                _uiState.value = GameListUiState.Success(games)
+                val sortedGames = sortGames(games, _sortOption.value)
+                _uiState.value = GameListUiState.Success(sortedGames)
             } catch (e: Exception) {
                 _uiState.value =
                     GameListUiState.Error(e.message ?: "Unknown error")
             }
+        }
+    }
+
+    private fun sortGames(games: List<Game>, option: SortOption): List<Game> {
+        return when (option) {
+            SortOption.NAME_ASC -> games.sortedBy { it.name }
+            SortOption.NAME_DESC -> games.sortedByDescending { it.name }
+            SortOption.RATING_ASC -> games.sortedBy { it.rating }
+            SortOption.RATING_DESC -> games.sortedByDescending { it.rating }
+            SortOption.RELEASED_ASC -> games.sortedBy { it.released ?: "" }
+            SortOption.RELEASED_DESC -> games.sortedByDescending { it.released ?: "" }
         }
     }
 
