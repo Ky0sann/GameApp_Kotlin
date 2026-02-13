@@ -16,6 +16,7 @@ fun AppNav(apiKey: String) {
 
     NavHost(navController = navController, startDestination = "game_list") {
 
+        // Popular Games
         composable("game_list") {
             val listVM: GameListViewModel = getViewModel()
             GameListScreen(
@@ -27,6 +28,7 @@ fun AppNav(apiKey: String) {
             )
         }
 
+        // Game Details
         composable(
             route = "game_detail/{gameId}",
             arguments = listOf(navArgument("gameId") { type = NavType.IntType })
@@ -40,5 +42,17 @@ fun AppNav(apiKey: String) {
                 navController = navController
             )
         }
+
+        // My Favorites
+        composable("my_favorites") {
+            val detailVM: GameDetailViewModel = getViewModel()
+            MyFavoritesScreen(
+                viewModel = detailVM,
+                onGameClick = { gameId ->
+                    navController.navigate("game_detail/$gameId")
+                }
+            )
+        }
     }
 }
+

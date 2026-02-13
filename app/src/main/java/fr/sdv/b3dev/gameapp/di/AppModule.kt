@@ -7,6 +7,7 @@ import fr.sdv.b3dev.gameapp.datasource.rest.GameRemoteDataSource
 import fr.sdv.b3dev.gameapp.presentation.GameRepository
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -24,7 +25,7 @@ val appModule = module {
     single { FavoritesRepository(get(), get()) }
 
 
-    viewModel { GameListViewModel(get(), get(), get()) }
+    viewModel { GameListViewModel(get()) }
 
-    viewModel { GameDetailViewModel(get()) }
+    viewModel { GameDetailViewModel(get(), get()) }
 }

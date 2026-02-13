@@ -27,8 +27,7 @@ fun GameDetailScreen(
     gameId: Int,
     apiKey: String,
     navController: NavController,
-    viewModel: GameDetailViewModel = getViewModel(),
-    ListVM: GameListViewModel = getViewModel()
+    viewModel: GameDetailViewModel = getViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -52,7 +51,7 @@ fun GameDetailScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = {ListVM.toggleFavorite(gameId)},
+                onClick = {viewModel.toggleFavorite(gameId)},
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(16.dp),
@@ -61,7 +60,7 @@ fun GameDetailScreen(
                     fontWeight = FontWeight.Bold
                 )
                 },
-                icon = {if(ListVM.isFavorite(gameId))
+                icon = {if(viewModel.isFavorite(gameId))
                     Icon(imageVector = Icons.Filled.Favorite, contentDescription = null)
                 else
                     Icon(imageVector = Icons.Filled.FavoriteBorder, contentDescription = null)

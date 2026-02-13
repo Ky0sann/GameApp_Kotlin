@@ -22,9 +22,9 @@ class FavoritesRepository(
         // Extract only needed fields
         val favoriteGame = FavoriteGame(
             id = game.id,
-            title = game.name,
+            name = game.name,
             description = game.description,
-            image = game.background_image,
+            background_image = game.background_image,
             rating = game.rating,
             released = game.released
         )

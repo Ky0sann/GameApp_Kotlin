@@ -119,4 +119,10 @@ dependencies {
     implementation("androidx.room:room-paging:$room_version")
 
 
+    //    navigation
+    implementation("androidx.navigation:navigation-compose:2.9.7")
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+
+
 }
