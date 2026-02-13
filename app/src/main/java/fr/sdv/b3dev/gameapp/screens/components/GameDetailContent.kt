@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import fr.sdv.b3dev.gameapp.domain.Game
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 
 @Composable
 fun SectionCard(
@@ -43,7 +46,7 @@ fun SectionCard(
 }
 
 @Composable
-fun GameDetailContent(game: Game, navController: androidx.navigation.NavController, context: Context) {
+fun GameDetailContent(game: Game, navController: androidx.navigation.NavController, context: Context,  isFavorite: Boolean, onFavoriteClick: () -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -67,9 +70,24 @@ fun GameDetailContent(game: Game, navController: androidx.navigation.NavControll
 
         // INFOS PRINCIPALES
         SectionCard(title = "Game Info") {
-            Text(text = game.name, style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "⭐ ${game.rating}", style = MaterialTheme.typography.bodyMedium)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column {
+                    Text(game.name, style = MaterialTheme.typography.titleLarge)
+                    Spacer(Modifier.height(4.dp))
+                    Text("⭐ ${game.rating}", style = MaterialTheme.typography.bodyMedium)
+                }
+                IconButton(onClick = onFavoriteClick) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
             game.esrbRating?.let { Text("ESRB: $it", style = MaterialTheme.typography.bodySmall, color = Color.LightGray) }
             Text("Released: ${game.released ?: "Unknown"}", style = MaterialTheme.typography.bodySmall, color = Color.LightGray)
             Text("Genres: ${game.genres.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)

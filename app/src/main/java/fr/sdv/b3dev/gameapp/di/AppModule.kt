@@ -1,7 +1,9 @@
 package fr.sdv.b3dev.gameapp.di
 
 import fr.sdv.b3dev.gameapp.datasource.rest.ApiModule
+import fr.sdv.b3dev.gameapp.datasource.rest.FavoritesDataSource
 import fr.sdv.b3dev.gameapp.datasource.rest.GameRemoteDataSource
+import fr.sdv.b3dev.gameapp.presentation.FavoritesRepository
 import fr.sdv.b3dev.gameapp.presentation.GameRepository
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
@@ -13,11 +15,15 @@ val appModule = module {
 
     single { ApiModule.provideApi(androidContext()) }
 
+    single { FavoritesDataSource(androidContext()) }
+
     single { GameRemoteDataSource(get()) }
 
     single { GameRepository(get()) }
 
     viewModel { GameListViewModel(get()) }
 
-    viewModel { GameDetailViewModel(get()) }
+    viewModel { GameDetailViewModel(get(), get()) }
+
+    single { FavoritesRepository(get(), get()) }
 }

@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
 }
 
 android {
@@ -69,6 +70,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.7")
     implementation("io.insert-koin:koin-androidx-compose:3.4.0")
     implementation("io.insert-koin:koin-android:3.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

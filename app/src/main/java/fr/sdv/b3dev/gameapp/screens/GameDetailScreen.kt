@@ -58,7 +58,14 @@ fun GameDetailScreen(
                 }
                 is GameDetailUiState.Success -> {
                     val game = (uiState as GameDetailUiState.Success).game
-                    GameDetailContent(game, navController, context)
+                    val isFavorite by viewModel.isFavorite.collectAsState()
+                    GameDetailContent(
+                        game = game,
+                        navController = navController,
+                        context = context,
+                        isFavorite = isFavorite,
+                        onFavoriteClick = { viewModel.toggleFavorite(game.id, apiKey) }
+                    )
                 }
                 is GameDetailUiState.Error -> {
                     Box(
