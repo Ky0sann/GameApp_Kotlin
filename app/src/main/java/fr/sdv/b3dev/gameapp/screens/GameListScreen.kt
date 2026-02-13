@@ -1,5 +1,6 @@
 package fr.sdv.b3dev.gameapp.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.screens.components.GameItem
 import org.koin.androidx.compose.getViewModel
+import fr.sdv.b3dev.gameapp.screens.components.SearchBar
 
 @Composable
 fun GameListScreen(
@@ -25,19 +27,18 @@ fun GameListScreen(
         viewModel.init(apiKey)
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
 
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = {
+        SearchBar(
+            query = searchQuery,
+            onQueryChange = {
                 searchQuery = it
                 viewModel.onSearchQueryChanged(it)
-            },
-            label = { Text("Search a game...") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            singleLine = true
+            }
         )
 
         when (uiState) {
