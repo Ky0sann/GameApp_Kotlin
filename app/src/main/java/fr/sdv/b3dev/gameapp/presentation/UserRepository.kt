@@ -1,8 +1,7 @@
 package fr.sdv.b3dev.gameapp.presentation
 
-import fr.sdv.b3dev.gameapp.datasource.local.UserDao
 import fr.sdv.b3dev.gameapp.domain.User
-
+/*
 class UserRepository(
     private val userDao: UserDao
 ) {
@@ -28,4 +27,4 @@ class UserRepository(
         val user = userDao.login(email, password)
             ?: throw Exception("Invalid credentials")
     }
-}
+} */

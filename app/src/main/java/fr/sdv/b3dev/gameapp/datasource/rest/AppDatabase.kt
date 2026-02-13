@@ -1,5 +1,5 @@
 package fr.sdv.b3dev.gameapp.datasource.local
-
+/*
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import fr.sdv.b3dev.gameapp.domain.User
@@ -13,4 +13,4 @@ import fr.sdv.b3dev.gameapp.domain.User
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
-}
+} */

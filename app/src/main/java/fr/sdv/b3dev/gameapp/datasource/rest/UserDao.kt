@@ -1,5 +1,5 @@
 package fr.sdv.b3dev.gameapp.datasource.local
-
+/*
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,4 +17,4 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1")
     suspend fun login(email: String, password: String): User?
-}
+} */

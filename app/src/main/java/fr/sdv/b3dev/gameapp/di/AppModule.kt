@@ -1,8 +1,5 @@
 package fr.sdv.b3dev.gameapp.di
 
-import androidx.room.Room
-import fr.sdv.b3dev.gameapp.datasource.local.AppDatabase
-import fr.sdv.b3dev.gameapp.datasource.local.UserDao
 import fr.sdv.b3dev.gameapp.datasource.rest.ApiModule
 import fr.sdv.b3dev.gameapp.datasource.rest.GameRemoteDataSource
 import fr.sdv.b3dev.gameapp.presentation.*
@@ -12,8 +9,9 @@ import org.koin.dsl.module
 
 val appModule = module {
 
+    /*
     // ========================
-    // ✅ ROOM DATABASE
+    // ROOM DATABASE
     // ========================
 
     single {
@@ -29,7 +27,7 @@ val appModule = module {
     }
 
     // ========================
-    // ✅ USER REPOSITORY
+    // USER REPOSITORY
     // ========================
 
     single { UserRepository(get()) }
@@ -37,8 +35,9 @@ val appModule = module {
     viewModel { AuthViewModel(get()) }
 
     // ========================
-    // ✅ RAWG API
+    // RAWG API
     // ========================
+    */
 
     single { ApiModule.provideApi(androidContext()) }
 

@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     // id("org.jetbrains.kotlin.android") version "1.9.22" apply false
-    id("com.google.devtools.ksp")
+    // id("com.google.devtools.ksp")
 }
 
 android {
@@ -72,9 +72,6 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:3.4.0")
     implementation("io.insert-koin:koin-android:3.4.0")
     implementation(libs.androidx.compose.foundation)
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
