@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.presentation.SortOption
+import fr.sdv.b3dev.gameapp.screens.components.FilterChipsRow
 import fr.sdv.b3dev.gameapp.screens.components.GameItem
 import org.koin.androidx.compose.getViewModel
 import fr.sdv.b3dev.gameapp.screens.components.SearchBar
@@ -24,6 +25,10 @@ fun GameListScreen(
     val uiState by viewModel.uiState.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
     val sortOption by viewModel.sortOptionState.collectAsState()
+
+    val genres by viewModel.selectedGenres.collectAsState()
+    val platforms by viewModel.selectedPlatforms.collectAsState()
+    val tags by viewModel.selectedTags.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.init(apiKey)
@@ -65,6 +70,14 @@ fun GameListScreen(
                 }
             }
         }
+
+        val allGenres = listOf("Action","Adventure","RPG","Shooter","Puzzle","Strategy")
+        val allPlatforms = listOf("PC","PlayStation","Xbox","Switch","iOS","Android")
+        val allTags = listOf("Singleplayer","Multiplayer","Co-op","VR","Story Rich")
+
+        FilterChipsRow("Genres", allGenres, genres) { viewModel.updateGenres(it) }
+        FilterChipsRow("Platforms", allPlatforms, platforms) { viewModel.updatePlatforms(it) }
+        FilterChipsRow("Tags", allTags, tags) { viewModel.updateTags(it) }
 
         when (uiState) {
             is GameListUiState.Loading -> {

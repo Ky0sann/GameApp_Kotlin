@@ -69,4 +69,61 @@ class GameRemoteDataSource(
             stores = stores
         )
     }
+
+    suspend fun getFilteredGames(
+        apiKey: String,
+        query: String? = null,
+        genres: List<String>? = null,
+        platforms: List<String>? = null,
+        tags: List<String>? = null,
+        dateRange: Pair<String, String>? = null,
+        ordering: String = "-rating",
+        pageSize: Int = 20
+    ): List<Game> {
+
+        val platformMap = mapOf(
+            "PC" to listOf("PC"),
+            "PlayStation" to listOf("PlayStation 4", "PlayStation 5"),
+            "Xbox" to listOf("Xbox One", "Xbox Series X|S"),
+            "Switch" to listOf("Nintendo Switch"),
+            "iOS" to listOf("iOS"),
+            "Android" to listOf("Android")
+        )
+
+        if (genres.isNullOrEmpty() && platforms.isNullOrEmpty() &&
+            tags.isNullOrEmpty() && dateRange == null && query.isNullOrBlank()
+        ) {
+            return getPopularGames(apiKey)
+        }
+
+        val datesParam = dateRange?.let { "${it.first},${it.second}" }
+
+        val apiResponse = api.getFilteredGames(
+            apiKey = apiKey,
+            query = query,
+            genres = null,
+            platforms = null,
+            tags = null,
+            dates = datesParam,
+            ordering = ordering,
+            pageSize = pageSize
+        ).results
+
+        val gamesDetailed = apiResponse.map { item ->
+            getGameDetail(item.id, apiKey)
+        }
+
+        return gamesDetailed.filter { game ->
+            val matchesQuery = query.isNullOrBlank() || game.name.contains(query, ignoreCase = true)
+            val matchesGenres = genres.isNullOrEmpty() || game.genres.any { it.name in genres }
+            val matchesPlatforms = platforms.isNullOrEmpty() || game.platforms.any { gamePlatform ->
+                platforms.any { selected ->
+                    platformMap[selected]?.any { it.equals(gamePlatform.name, ignoreCase = true) } == true
+                }
+            }
+            val matchesTags = tags.isNullOrEmpty() || game.tags.any { it in tags!! }
+
+            matchesQuery && matchesGenres && matchesPlatforms && matchesTags
+        }
+    }
 }

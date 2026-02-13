@@ -27,4 +27,16 @@ class GameRepository(
     suspend fun searchGames(apiKey: String, query: String): List<Game> {
         return remoteDataSource.searchGames(apiKey, query)
     }
+
+    suspend fun getFilteredGames(
+        apiKey: String,
+        query: String? = null,
+        genres: List<String>? = null,
+        platforms: List<String>? = null,
+        tags: List<String>? = null,
+        dateRange: Pair<String, String>? = null,
+        ordering: String = "-rating"
+    ): List<Game> {
+        return remoteDataSource.getFilteredGames(apiKey, query, genres, platforms, tags, dateRange, ordering)
+    }
 }

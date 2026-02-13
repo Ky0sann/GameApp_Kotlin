@@ -24,6 +24,18 @@ class GameListViewModel(
     private val searchQuery = MutableStateFlow("")
     private var currentApiKey: String? = null
 
+    private val _selectedGenres = MutableStateFlow<List<String>>(emptyList())
+    val selectedGenres: StateFlow<List<String>> = _selectedGenres
+
+    private val _selectedPlatforms = MutableStateFlow<List<String>>(emptyList())
+    val selectedPlatforms: StateFlow<List<String>> = _selectedPlatforms
+
+    private val _selectedTags = MutableStateFlow<List<String>>(emptyList())
+    val selectedTags: StateFlow<List<String>> = _selectedTags
+
+    private val _selectedDateRange = MutableStateFlow<Pair<String, String>?>(null)
+    val selectedDateRange: StateFlow<Pair<String, String>?> = _selectedDateRange
+
     init {
         observeSearch()
     }
@@ -120,4 +132,54 @@ class GameListViewModel(
             }
         }
     }
+
+    private fun fetchGames() {
+        val apiKey = currentApiKey ?: return
+        viewModelScope.launch {
+            _uiState.value = GameListUiState.Loading
+            try {
+                val games = if (_selectedGenres.value.isEmpty() &&
+                    _selectedPlatforms.value.isEmpty() &&
+                    _selectedTags.value.isEmpty() &&
+                    _selectedDateRange.value == null &&
+                    searchQuery.value.isBlank()) {
+                    repository.getPopularGames(apiKey)
+                } else {
+                    repository.getFilteredGames(
+                        apiKey = apiKey,
+                        query = searchQuery.value.ifBlank { null },
+                        genres = _selectedGenres.value,
+                        platforms = _selectedPlatforms.value,
+                        tags = _selectedTags.value,
+                        dateRange = _selectedDateRange.value,
+                        ordering = _sortOption.value.toApiOrdering()
+                    )
+                }
+                _uiState.value = GameListUiState.Success(games)
+            } catch (e: Exception) {
+                _uiState.value = GameListUiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun updateGenres(genres: List<String>) {
+        _selectedGenres.value = genres
+        fetchGames()
+    }
+
+    fun updatePlatforms(platforms: List<String>) {
+        _selectedPlatforms.value = platforms
+        fetchGames()
+    }
+
+    fun updateTags(tags: List<String>) {
+        _selectedTags.value = tags
+        fetchGames()
+    }
+
+    fun updateDateRange(range: Pair<String, String>?) {
+        _selectedDateRange.value = range
+        fetchGames()
+    }
+
 }
