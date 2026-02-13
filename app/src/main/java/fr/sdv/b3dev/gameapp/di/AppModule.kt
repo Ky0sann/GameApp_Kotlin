@@ -7,10 +7,11 @@ import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import org.koin.android.ext.koin.androidContext
 
 val appModule = module {
 
-    single { ApiModule.api }
+    single { ApiModule.provideApi(androidContext()) }
 
     single { GameRemoteDataSource(get()) }
 

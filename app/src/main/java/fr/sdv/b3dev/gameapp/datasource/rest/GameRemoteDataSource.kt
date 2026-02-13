@@ -4,6 +4,8 @@ import fr.sdv.b3dev.gameapp.domain.Game
 import fr.sdv.b3dev.gameapp.domain.Genre
 import fr.sdv.b3dev.gameapp.domain.Platform
 import fr.sdv.b3dev.gameapp.domain.Store
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 
 class GameRemoteDataSource(
     private val api: GameApiService
@@ -21,14 +23,32 @@ class GameRemoteDataSource(
         }
     }
 
-    suspend fun getGameDetail(gameId: Int, apiKey: String): Game {
-        val detailResponse = api.getGameDetail(gameId, apiKey)
-        val screenshotResponse = api.getGameScreenshots(gameId, apiKey)
-        val movieResponse = api.getGameMovies(gameId, apiKey)
+    suspend fun searchGames(apiKey: String, query: String): List<Game> {
+        return api.searchGames(apiKey, query).results.map { item ->
+            Game(
+                id = item.id,
+                name = item.name,
+                background_image = item.backgroundImage,
+                rating = item.rating,
+                released = item.released
+            )
+        }
+    }
+
+    suspend fun getGameDetail(gameId: Int, apiKey: String): Game = coroutineScope {
+
+        val detailDeferred = async { api.getGameDetail(gameId, apiKey) }
+        val screenshotsDeferred = async { api.getGameScreenshots(gameId, apiKey) }
+        val moviesDeferred = async { api.getGameMovies(gameId, apiKey) }
+
+        val detailResponse = detailDeferred.await()
+        val screenshotResponse = screenshotsDeferred.await()
+        val movieResponse = moviesDeferred.await()
+
         val firstTrailer = movieResponse.results.firstOrNull()
         val stores = detailResponse.stores.map { Store(it.store.name, it.store.domain) }
 
-        return Game(
+        Game(
             id = detailResponse.id,
             name = detailResponse.name,
             background_image = detailResponse.backgroundImage,

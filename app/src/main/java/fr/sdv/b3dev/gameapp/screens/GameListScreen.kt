@@ -18,20 +18,29 @@ fun GameListScreen(
     apiKey: String,
     onGameClick: (Int) -> Unit
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchPopularGames(apiKey)
+        viewModel.init(apiKey)
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
+
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = {
+                searchQuery = it
+                viewModel.onSearchQueryChanged(it)
+            },
+            label = { Text("Search a game...") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            singleLine = true
+        )
 
         when (uiState) {
-
             is GameListUiState.Loading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -69,4 +78,5 @@ fun GameListScreen(
         }
     }
 }
+
 

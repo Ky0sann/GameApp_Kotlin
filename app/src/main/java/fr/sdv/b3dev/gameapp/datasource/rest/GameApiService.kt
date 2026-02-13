@@ -34,4 +34,11 @@ interface GameApiService {
         @Path("id") gameId: Int,
         @Query("key") apiKey: String
     ): MovieResponse
+
+    @GET("games")
+    suspend fun searchGames(
+        @Query("key") apiKey: String,
+        @Query("search") query: String,
+        @Query("page_size") pageSize: Int = 20
+    ): GameResponse
 }
