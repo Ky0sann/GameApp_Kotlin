@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -19,10 +20,20 @@ fun LoginScreen(
     navController: NavController,
     viewModel: AuthViewModel = getViewModel()
 ) {
+
     val uiState by viewModel.uiState.collectAsState()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    // Navigation propre
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Success) {
+            navController.navigate("game_list") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -31,14 +42,18 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        Text("Login", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = "GameApp",
+            style = MaterialTheme.typography.headlineLarge
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -47,8 +62,9 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Mot de passe") },
             visualTransformation = PasswordVisualTransformation(),
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -58,25 +74,22 @@ fun LoginScreen(
             onClick = { viewModel.login(email, password) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text("Se connecter")
         }
 
         TextButton(
             onClick = { navController.navigate("register") }
         ) {
-            Text("No account? Register")
+            Text("Pas de compte ? S'inscrire")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         when (uiState) {
             is AuthUiState.Loading -> {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-            }
-            is AuthUiState.Success -> {
-                LaunchedEffect(Unit) {
-                    navController.navigate("game_list") {
-                        popUpTo("login") { inclusive = true }
-                    }
-                }
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
             is AuthUiState.Error -> {
                 Text(

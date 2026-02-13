@@ -18,7 +18,7 @@ fun GameAppTheme(
 ) {
     MaterialTheme(
         colorScheme = DarkColorScheme,
-        typography = Typography(),
+        typography = Typography,
         content = content
     )
 }

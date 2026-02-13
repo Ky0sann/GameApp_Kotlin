@@ -1,17 +1,44 @@
 package fr.sdv.b3dev.gameapp.di
 
+import androidx.room.Room
+import fr.sdv.b3dev.gameapp.datasource.local.AppDatabase
+import fr.sdv.b3dev.gameapp.datasource.local.UserDao
 import fr.sdv.b3dev.gameapp.datasource.rest.ApiModule
 import fr.sdv.b3dev.gameapp.datasource.rest.GameRemoteDataSource
-import fr.sdv.b3dev.gameapp.presentation.AuthRepository
-import fr.sdv.b3dev.gameapp.presentation.AuthViewModel
-import fr.sdv.b3dev.gameapp.presentation.GameRepository
-import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
-import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
+import fr.sdv.b3dev.gameapp.presentation.*
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import org.koin.android.ext.koin.androidContext
 
 val appModule = module {
+
+    // ========================
+    // ✅ ROOM DATABASE
+    // ========================
+
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "gameapp_db"
+        ).build()
+    }
+
+    single<UserDao> {
+        get<AppDatabase>().userDao()
+    }
+
+    // ========================
+    // ✅ USER REPOSITORY
+    // ========================
+
+    single { UserRepository(get()) }
+
+    viewModel { AuthViewModel(get()) }
+
+    // ========================
+    // ✅ RAWG API
+    // ========================
 
     single { ApiModule.provideApi(androidContext()) }
 
@@ -22,8 +49,4 @@ val appModule = module {
     viewModel { GameListViewModel(get()) }
 
     viewModel { GameDetailViewModel(get()) }
-
-    single { AuthRepository() }
-
-    viewModel { AuthViewModel(get()) }
 }

@@ -13,16 +13,27 @@ import androidx.navigation.NavController
 import fr.sdv.b3dev.gameapp.presentation.AuthUiState
 import fr.sdv.b3dev.gameapp.presentation.AuthViewModel
 import org.koin.androidx.compose.getViewModel
+
 @Composable
 fun RegisterScreen(
     navController: NavController,
     viewModel: AuthViewModel = getViewModel()
 ) {
+
     val uiState by viewModel.uiState.collectAsState()
 
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    // Navigation propre
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Success) {
+            navController.navigate("game_list") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -31,29 +42,39 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        Text("Register", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = "GameApp",
+            style = MaterialTheme.typography.headlineLarge
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
+            label = { Text("Nom d'utilisateur") },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Mot de passe") },
             visualTransformation = PasswordVisualTransformation(),
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -65,14 +86,22 @@ fun RegisterScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Register")
+            Text("S'inscrire")
         }
 
+        TextButton(
+            onClick = { navController.popBackStack() }
+        ) {
+            Text("Déjà un compte ? Se connecter")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         when (uiState) {
-            is AuthUiState.Success -> {
-                LaunchedEffect(Unit) {
-                    navController.popBackStack()
-                }
+            is AuthUiState.Loading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
             is AuthUiState.Error -> {
                 Text(

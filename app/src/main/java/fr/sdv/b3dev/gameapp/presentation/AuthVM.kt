@@ -34,7 +34,7 @@ class AuthViewModel(
             try {
                 repository.register(
                     User(
-                        id = 0L, // ID will be set by the repository
+                        id = 0L,
                         username = username,
                         email = email,
                         password = password,
