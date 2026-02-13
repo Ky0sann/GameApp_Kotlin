@@ -54,7 +54,8 @@ fun LoginScreen(
             onValueChange = { email = it },
             label = { Text("Email") },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = textFieldColors()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -65,7 +66,8 @@ fun LoginScreen(
             label = { Text("Mot de passe") },
             visualTransformation = PasswordVisualTransformation(),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = textFieldColors()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -101,3 +103,14 @@ fun LoginScreen(
         }
     }
 }
+
+@Composable
+private fun textFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = MaterialTheme.colorScheme.primary,
+    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+    focusedLabelColor = MaterialTheme.colorScheme.primary,
+    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+    cursorColor = MaterialTheme.colorScheme.primary,
+    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+)

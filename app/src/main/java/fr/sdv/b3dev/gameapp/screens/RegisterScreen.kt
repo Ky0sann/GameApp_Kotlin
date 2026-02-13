@@ -43,7 +43,7 @@ fun RegisterScreen(
     ) {
 
         Text(
-            text = "GameApp",
+            text = "Créer un compte",
             style = MaterialTheme.typography.headlineLarge
         )
 
@@ -54,7 +54,8 @@ fun RegisterScreen(
             onValueChange = { username = it },
             label = { Text("Nom d'utilisateur") },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = textFieldColors()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -63,8 +64,12 @@ fun RegisterScreen(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = textFieldColors()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -74,25 +79,21 @@ fun RegisterScreen(
             onValueChange = { password = it },
             label = { Text("Mot de passe") },
             visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = textFieldColors()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                viewModel.register(username, email, password)
-            },
+            onClick = { viewModel.register(username, email, password) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("S'inscrire")
-        }
-
-        TextButton(
-            onClick = { navController.popBackStack() }
-        ) {
-            Text("Déjà un compte ? Se connecter")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -113,3 +114,14 @@ fun RegisterScreen(
         }
     }
 }
+
+@Composable
+private fun textFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = MaterialTheme.colorScheme.primary,
+    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+    focusedLabelColor = MaterialTheme.colorScheme.primary,
+    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+    cursorColor = MaterialTheme.colorScheme.primary,
+    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+)
