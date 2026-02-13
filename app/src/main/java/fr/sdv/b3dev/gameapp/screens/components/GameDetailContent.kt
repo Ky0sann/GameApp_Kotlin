@@ -26,6 +26,18 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import fr.sdv.b3dev.gameapp.domain.BacklogGame
+import fr.sdv.b3dev.gameapp.domain.Status
+import fr.sdv.b3dev.gameapp.domain.displayName
+import fr.sdv.b3dev.gameapp.presentation.BacklogRepository
+import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
+import fr.sdv.b3dev.gameapp.screens.components.SectionCard
 
 @Composable
 fun SectionCard(
@@ -46,8 +58,9 @@ fun SectionCard(
 }
 
 @Composable
-fun GameDetailContent(game: Game, navController: androidx.navigation.NavController, context: Context,  isFavorite: Boolean, onFavoriteClick: () -> Unit) {
+fun GameDetailContent(game: Game, navController: androidx.navigation.NavController, context: Context,  isFavorite: Boolean, onFavoriteClick: () -> Unit, viewModel: GameDetailViewModel) {
     val scrollState = rememberScrollState()
+    val currentStatus by viewModel.backlogStatus.collectAsState()
 
     Column(
         modifier = Modifier
@@ -93,6 +106,37 @@ fun GameDetailContent(game: Game, navController: androidx.navigation.NavControll
             Text("Genres: ${game.genres.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)
             Text("Platforms: ${game.platforms.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)
             Text("Metacritic: ${game.metacritic ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
+        }
+
+        // BACKLOG STATUS
+        SectionCard(title = "Backlog Status") {
+            val options = listOf(Status.TO_PLAY, Status.PLAYING, Status.COMPLETED)
+            var expanded by remember { mutableStateOf(false) }
+
+            Box {
+                TextButton(onClick = { expanded = true }) {
+                    Text(currentStatus?.toString() ?: "Select Status")
+                }
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    options.forEach { status ->
+                        DropdownMenuItem(
+                            text = { Text(status.displayName()) },
+                            onClick = {
+                                viewModel.updateBacklogStatus(game.id, game.name, status)
+                                expanded = false
+                            }
+                        )
+                    }
+
+                    DropdownMenuItem(
+                        text = { Text("Remove Status") },
+                        onClick = {
+                            viewModel.removeBacklogStatus(game.id)
+                            expanded = false
+                        }
+                    )
+                }
+            }
         }
 
         // DESCRIPTION

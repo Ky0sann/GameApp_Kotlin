@@ -64,7 +64,8 @@ fun GameDetailScreen(
                         navController = navController,
                         context = context,
                         isFavorite = isFavorite,
-                        onFavoriteClick = { viewModel.toggleFavorite(game.id, apiKey) }
+                        onFavoriteClick = { viewModel.toggleFavorite(game.id, apiKey)},
+                        viewModel = viewModel
                     )
                 }
                 is GameDetailUiState.Error -> {
