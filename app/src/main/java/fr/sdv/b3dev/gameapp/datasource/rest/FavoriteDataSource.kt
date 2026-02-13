@@ -4,7 +4,6 @@ package fr.sdv.b3dev.gameapp.datasource.rest
 import android.content.Context
 import fr.sdv.b3dev.gameapp.domain.FavoriteGame
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.io.File
 
@@ -13,7 +12,7 @@ class FavoritesDataSource(private val context: Context) {
     private val fileName = "games_favorites.json"
 
     private val json = Json {
-        prettyPrint  = true
+        prettyPrint = true
         ignoreUnknownKeys = true
     }
 
@@ -21,36 +20,40 @@ class FavoritesDataSource(private val context: Context) {
         return File(context.filesDir, fileName)
     }
 
-    fun getFavorites(): List<FavoriteGame> {
+    private fun readFavorites(): MutableList<FavoriteGame> {
         val file = getFile()
-        if (!file.exists()) return emptyList()
+        if (!file.exists()) return mutableListOf()
 
         val content = file.readText()
-        if (content.isBlank()) return emptyList()
+        if (content.isBlank()) return mutableListOf()
 
         return json.decodeFromString(content)
     }
 
-    fun saveFavorites(favorites: List<FavoriteGame>) {
+    private fun saveFavorites(favorites: List<FavoriteGame>) {
         val file = getFile()
         file.writeText(json.encodeToString(favorites))
     }
 
-    fun toggleFavorite(game: FavoriteGame) {
-        val currentFavorites = getFavorites().toMutableList()
-
-        val existing = currentFavorites.find { it.id == game.id }
-
-        if (existing != null) {
-            currentFavorites.remove(existing)
-        } else {
-            currentFavorites.add(game)
-        }
-
-        saveFavorites(currentFavorites)
+    fun getFavorites(): List<FavoriteGame> {
+        return readFavorites()
     }
 
     fun isFavorite(id: Int): Boolean {
-        return getFavorites().any { it.id == id }
+        return readFavorites().any { it.id == id }
+    }
+
+    fun toggleFavorite(game: FavoriteGame) {
+        val favorites = readFavorites()
+
+        val index = favorites.indexOfFirst { it.id == game.id }
+
+        if (index != -1) {
+            favorites.removeAt(index)
+        } else {
+            favorites.add(game)
+        }
+
+        saveFavorites(favorites)
     }
 }
