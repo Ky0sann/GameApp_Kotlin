@@ -24,6 +24,8 @@ import coil.compose.AsyncImage
 import fr.sdv.b3dev.gameapp.domain.Game
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.collectAsState
@@ -112,15 +114,57 @@ fun GameDetailContent(game: Game, navController: androidx.navigation.NavControll
         SectionCard(title = "Backlog Status") {
             val options = listOf(Status.TO_PLAY, Status.PLAYING, Status.COMPLETED)
             var expanded by remember { mutableStateOf(false) }
+            val currentStatus by viewModel.backlogStatus.collectAsState()
+
+            @Composable
+            fun statusColor(status: Status?) = when (status) {
+                Status.TO_PLAY -> Color.Gray
+                Status.PLAYING -> Color.Blue
+                Status.COMPLETED -> Color.Green
+                null -> MaterialTheme.colorScheme.onSurface
+            }
 
             Box {
-                TextButton(onClick = { expanded = true }) {
-                    Text(currentStatus?.toString() ?: "Select Status")
+                TextButton(
+                    onClick = { expanded = true },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = statusColor(currentStatus)
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = currentStatus?.displayName() ?: "Select Status",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = statusColor(currentStatus)
+                        )
+                        Icon(
+                            imageVector = if (expanded) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown,
+                            contentDescription = "Dropdown icon",
+                            tint = statusColor(currentStatus)
+                        )
+                    }
                 }
-                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                            RoundedCornerShape(12.dp)
+                        )
+                ) {
                     options.forEach { status ->
                         DropdownMenuItem(
-                            text = { Text(status.displayName()) },
+                            text = { Text(status.displayName(), style = MaterialTheme.typography.bodyMedium, color = statusColor(status)) },
                             onClick = {
                                 viewModel.updateBacklogStatus(game.id, game.name, status)
                                 expanded = false
@@ -129,7 +173,7 @@ fun GameDetailContent(game: Game, navController: androidx.navigation.NavControll
                     }
 
                     DropdownMenuItem(
-                        text = { Text("Remove Status") },
+                        text = { Text("Remove Status", style = MaterialTheme.typography.bodyMedium, color = Color.Red) },
                         onClick = {
                             viewModel.removeBacklogStatus(game.id)
                             expanded = false
