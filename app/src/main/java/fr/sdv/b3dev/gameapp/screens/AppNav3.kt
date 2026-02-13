@@ -14,7 +14,15 @@ import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
 fun AppNav(apiKey: String) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "game_list") {
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") {
+            LoginScreen(navController)
+        }
+
+        composable("register") {
+            RegisterScreen(navController)
+        }
+
 
         composable("game_list") {
             val listVM: GameListViewModel = getViewModel()

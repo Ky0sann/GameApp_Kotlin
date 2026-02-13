@@ -27,7 +27,7 @@ android {
         buildConfigField(
             "String",
             "RAWG_API_KEY",
-            "\"$rawgApiKey\""
+            "\"131314442a1e4509be24b4ac0a3ef7c5\""
         )
 
     }

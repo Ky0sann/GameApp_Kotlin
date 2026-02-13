@@ -2,6 +2,8 @@ package fr.sdv.b3dev.gameapp.di
 
 import fr.sdv.b3dev.gameapp.datasource.rest.ApiModule
 import fr.sdv.b3dev.gameapp.datasource.rest.GameRemoteDataSource
+import fr.sdv.b3dev.gameapp.presentation.AuthRepository
+import fr.sdv.b3dev.gameapp.presentation.AuthViewModel
 import fr.sdv.b3dev.gameapp.presentation.GameRepository
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
@@ -20,4 +22,8 @@ val appModule = module {
     viewModel { GameListViewModel(get()) }
 
     viewModel { GameDetailViewModel(get()) }
+
+    single { AuthRepository() }
+
+    viewModel { AuthViewModel(get()) }
 }
