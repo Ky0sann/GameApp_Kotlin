@@ -12,9 +12,13 @@ import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
 
 @Composable
 fun AppNav(apiKey: String) {
+
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "game_list") {
+    NavHost(
+        navController = navController,
+        startDestination = "game_list"
+    ) {
 
         // Popular Games
         composable("game_list") {
@@ -22,6 +26,7 @@ fun AppNav(apiKey: String) {
             GameListScreen(
                 apiKey = apiKey,
                 viewModel = listVM,
+                navController = navController,
                 onGameClick = { gameId ->
                     navController.navigate("game_detail/$gameId")
                 }
@@ -31,7 +36,9 @@ fun AppNav(apiKey: String) {
         // Game Details
         composable(
             route = "game_detail/{gameId}",
-            arguments = listOf(navArgument("gameId") { type = NavType.IntType })
+            arguments = listOf(
+                navArgument("gameId") { type = NavType.IntType }
+            )
         ) { backStackEntry ->
             val gameId = backStackEntry.arguments?.getInt("gameId") ?: 0
             val detailVM: GameDetailViewModel = getViewModel()
@@ -55,4 +62,3 @@ fun AppNav(apiKey: String) {
         }
     }
 }
-

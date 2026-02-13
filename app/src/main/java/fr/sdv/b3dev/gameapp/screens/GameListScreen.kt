@@ -10,20 +10,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.screens.components.GameItem
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun GameListScreen(
-    viewModel: GameListViewModel = getViewModel(),
+    viewModel: GameListViewModel,
     apiKey: String,
+    navController: NavController,
     onGameClick: (Int) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
-    val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
         viewModel.fetchPopularGames(apiKey)
@@ -31,16 +30,21 @@ fun GameListScreen(
 
     Scaffold(
         floatingActionButton = {
-
-            IconButton(onClick = { navController.navigate("my_favorites") }) {
-                Icon(imageVector = Icons.Default.Favorite, contentDescription = "My Favorites")
+            IconButton(
+                onClick = { navController.navigate("my_favorites") }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "My Favorites"
+                )
             }
-
-
-        },
+        }
     ) { paddingValues ->
+
         Surface(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             color = MaterialTheme.colorScheme.background
         ) {
 
@@ -84,4 +88,3 @@ fun GameListScreen(
         }
     }
 }
-
