@@ -21,9 +21,9 @@ class FavoritesRepository(
 
         val favoriteGame = FavoriteGame(
             id = game.id,
-            title = game.name ?: "Unknown",
+            name = game.name ?: "Unknown",
             description = game.description ?: "",
-            image = game.background_image ?: "",
+            background_image = game.background_image ?: "",
             rating = game.rating ?: 0.0,
             released = game.released ?: "Unknown"
         )

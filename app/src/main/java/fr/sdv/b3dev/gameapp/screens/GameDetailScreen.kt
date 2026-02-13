@@ -20,6 +20,7 @@ import fr.sdv.b3dev.gameapp.presentation.GameDetailViewModel
 import fr.sdv.b3dev.gameapp.presentation.GameListViewModel
 import fr.sdv.b3dev.gameapp.screens.components.GameDetailContent
 import org.koin.androidx.compose.getViewModel
+import androidx.compose.runtime.collectAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,27 +49,7 @@ fun GameDetailScreen(
                     }
                 }
             )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {viewModel.toggleFavorite(gameId)},
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(16.dp),
-                text = { Text(
-                    text = "Favoris",
-                    fontWeight = FontWeight.Bold
-                )
-                },
-                icon = {if(viewModel.isFavorite(gameId))
-                    Icon(imageVector = Icons.Filled.Favorite, contentDescription = null)
-                else
-                    Icon(imageVector = Icons.Filled.FavoriteBorder, contentDescription = null)
-                }
-            )
-        },
-
-
+        }
     ) { paddingValues ->
         Surface(
             modifier = Modifier

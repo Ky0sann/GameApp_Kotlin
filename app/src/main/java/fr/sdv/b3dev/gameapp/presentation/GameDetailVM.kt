@@ -2,6 +2,7 @@ package fr.sdv.b3dev.gameapp.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.sdv.b3dev.gameapp.domain.FavoriteGame
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -28,6 +29,10 @@ class GameDetailViewModel(
 
     private val _backlogStatus = MutableStateFlow<Status?>(null)
     val backlogStatus: StateFlow<Status?> = _backlogStatus
+
+    private val _favorites = MutableStateFlow<List<FavoriteGame>>(emptyList())
+    val favorites: StateFlow<List<FavoriteGame>> = _favorites
+
 
     fun fetchGameDetail(gameId: Int, apiKey: String) {
         viewModelScope.launch {
@@ -63,4 +68,11 @@ class GameDetailViewModel(
         backlogRepository.remove(gameId)
         _backlogStatus.value = null
     }
+
+    fun loadFavorites() {
+        viewModelScope.launch {
+            _favorites.value = favoritesRepository.getFavorites()
+        }
+    }
+
 }

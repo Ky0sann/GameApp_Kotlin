@@ -57,7 +57,8 @@ fun AppNav(apiKey: String) {
                 viewModel = detailVM,
                 onGameClick = { gameId ->
                     navController.navigate("game_detail/$gameId")
-                }
+                },
+                navController = navController
             )
         }
     }
